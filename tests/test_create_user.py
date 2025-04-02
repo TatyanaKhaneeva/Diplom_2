@@ -1,32 +1,37 @@
 import requests
 import allure
-
+from helper.helper import Helper
 from data.URLs import create_user
 
 
 class TestCreateUser:
 
     @allure.title('Создание уникального пользователя')
-    def test_create_unique_user(self, generate_random_data, delete_user):
-        payload = generate_random_data
-        response = requests.post(create_user, json=payload)
-
+    def test_create_unique_user(self, delete_user):
+        helper = Helper()
+        email = helper.generate_random_email()
+        password = helper.generate_random_string(10)
+        name = helper.generate_random_string(10)
+        user_data = {
+            "email": email,
+            "password": password,
+            "name": name
+        }
+        response = requests.post(create_user, json=user_data)
         assert response.status_code == 200
         assert response.json()["success"] is True
-
-        user_data = response.json()["user"]
-        access_token = response.json()["accessToken"]
-
-        delete_user(user_data, access_token)
+        delete_user["user_data"] = response.json()["user"]
+        delete_user["access_token"] = response.json()["accessToken"]
 
 
     @allure.title('Создание уже зарегистрированного пользователя')
-    def test_create_existing_user(self):
+    def test_create_existing_user(self, create_and_login_user):
+        existing_user_data = create_and_login_user["user_data"]
         url = "https://stellarburgers.nomoreparties.site/api/auth/register"
         payload = {
-            "email": "existinguser@example.com",
-            "password": "existingpassword",
-            "name": "Existing User"
+            "email": existing_user_data["email"],
+            "password": existing_user_data["password"],
+            "name": existing_user_data["name"]
         }
         with allure.step("Отправка запроса на создание уже зарегистрированного пользователя"):
             response = requests.post(url, json=payload)
