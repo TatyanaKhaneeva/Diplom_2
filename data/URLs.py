@@ -1,0 +1,8 @@
+create_user = "https://stellarburgers.nomoreparties.site/api/auth/register"
+login = "https://stellarburgers.nomoreparties.site/api/auth/login"
+change_user_data = "https://stellarburgers.nomoreparties.site/api/auth/user"
+create_order = "https://stellarburgers.nomoreparties.site/api/orders"
+get_user_orders = "https://stellarburgers.nomoreparties.site/api/orders"
+delete_user_url = "https://stellarburgers.nomoreparties.site/api/auth/user"
+refresh_token = "https://stellarburgers.nomoreparties.site/api/auth/token"
+ingredients_url = "https://stellarburgers.nomoreparties.site/api/ingredients"
